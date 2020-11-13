@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Views &#8212; Lumen 0.0.1 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Filters" href="filter.html" />
+    <link rel="prev" title="Sources" href="source.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <p class="title">Lumen</p>
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../index.html">Home</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Architecture</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../rest.html">REST Specification</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../dashboard.html">Dashboard Specification</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+          
+            
+                <li class="">
+                    <a href="index.html">Architecture</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="source.html">Source</a>
+                </li>
+            
+          
+            
+                <li class="active">
+                    <a href="">View</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="filter.html">Filter</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="transform.html">Transform</a>
+                </li>
+            
+          
+        
+        
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#view-types" class="nav-link">View types</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="views">
+<h1>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#lumen.views.View" title="lumen.views.View"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">View</span></code></span></a> type is the main visual type and
+determines how the metrics returned by a
+<a class="reference internal" href="source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Source</span></code></span></a> are rendered.</p>
+<dl class="py class">
+<dt id="lumen.views.View">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.views.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View" title="Permalink to this definition">¶</a></dt>
+<dd><p>A View renders the data returned by a Source as a Viewable Panel
+object. The base class provides methods which query the Source for
+the latest data given the current filters and applies all
+specified <cite>transforms</cite>.</p>
+<p>Subclasses should use these methods to query the data and return
+a Viewable Panel object in the <cite>get_panel</cite> method.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">application</span></code> = param.Parameter()</dt><dd><p>The containing application.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">filters</span></code> = param.List(bounds=(0, None), default=[])</dt><dd><p>A list of Filter object providing the query parameters for the
+        Source.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">monitor</span></code> = param.Parameter()</dt><dd><p>The Monitor class which owns this view.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">source</span></code> = param.ClassSelector(class_=&lt;class ‘lumen.sources.base.Source’&gt;)</dt><dd><p>The Source to query for the data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">transforms</span></code> = param.List(bounds=(0, None), default=[])</dt><dd><p>A list of transforms to apply to the data returned by the
+        Source before visualizing it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">table</span></code> = param.String(default=’’)</dt><dd><p>The table being visualized.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field</span></code> = param.String(default=’’)</dt><dd><p>The field being visualized.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lumen.views.View.from_spec">
+<em class="property">classmethod </em><code class="sig-name descname">from_spec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spec</span></em>, <em class="sig-param"><span class="n">monitor</span></em>, <em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">filters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View.from_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves a View specification given the schema of the Source
+it will be filtering on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spec</strong> (<em>dict</em>) – Specification declared as a dictionary of parameter values.</p></li>
+<li><p><strong>monitor</strong> (<em>lumen.monitor.Monitor</em>) – The Monitor object that holds this View.</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="source.html#lumen.sources.Source" title="lumen.sources.Source"><em>lumen.sources.Source</em></a>) – The Source object containing the tables the View renders.</p></li>
+<li><p><strong>filters</strong> (<em>list</em><em>(</em><a class="reference internal" href="filter.html#lumen.filters.Filter" title="lumen.filters.Filter"><em>lumen.filters.Filter</em></a><em>)</em>) – A list of Filter objects which provide query values for
+the Source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The resolved View object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.views.View.get_data">
+<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the Source for the specified table applying any
+filters and transformations specified on the View. Unlike
+<cite>get_value</cite> this should be used when multiple return values
+are expected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The queried table after filtering and transformations are
+applied.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.views.View.get_panel">
+<code class="sig-name descname">get_panel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View.get_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs and returns a Panel object which will represent a
+view of the queried table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Panel Viewable object representing a current
+representation of the queried table.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>panel.Viewable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.views.View.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the Source for the data associated with a particular
+field applying any filters and transformations specified on
+the View. Unlike <cite>get_data</cite> this method returns a single
+scalar value associated with the field and should therefore
+only be used if only a single.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>field</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – The field from the table to return; if None uses
+field defined on the View.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A single scalar value representing the current value of
+the queried field.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.views.View.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">invalidate_cache</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.View.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers an update in the View.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>invalidate_cache</strong> (<em>bool</em>) – Whether to force a rerender of the containing Monitor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>stale</strong> – Whether the panel on the View is stale and needs to be
+rerendered.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="view-types">
+<h2>View types<a class="headerlink" href="#view-types" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lumen.views.hvPlotView">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.views.</code><code class="sig-name descname">hvPlotView</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.hvPlotView" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hvPlotView renders the queried data as a bokeh plot generated
+with hvPlot. hvPlot allows for a concise declaration of a plot via
+its simple API.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.views.base.View</span></code>: application, filters, monitor, source, transforms, table, field</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">kind</span></code> = param.String(default=’’)</dt><dd><p>The kind of plot, e.g. ‘scatter’ or ‘line’.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x</span></code> = param.String(default=’’)</dt><dd><p>The column to render on the x-axis.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code> = param.String(default=’’)</dt><dd><p>The column to render on the y-axis.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">opts</span></code> = param.Dict(class_=&lt;class ‘dict’&gt;, default={})</dt><dd><p>HoloViews option to apply on the plot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.views.IndicatorView">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.views.</code><code class="sig-name descname">IndicatorView</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.IndicatorView" title="Permalink to this definition">¶</a></dt>
+<dd><p>The IndicatorView renders the latest field value as a Panel
+Indicator.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.views.base.View</span></code>: application, filters, monitor, source, transforms, table, field</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">indicator</span></code> = param.String(default=’’)</dt><dd><p>The name of the panel Indicator type</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">label</span></code> = param.String(default=’’)</dt><dd><p>A custom label to use for the Indicator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.views.StringView">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.views.</code><code class="sig-name descname">StringView</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.views.StringView" title="Permalink to this definition">¶</a></dt>
+<dd><p>The StringView renders the latest value of the field as a HTML
+string with a specified fontsize.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.views.base.View</span></code>: application, filters, monitor, source, transforms, table, field</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">font_size</span></code> = param.String(default=’24pt’)</dt><dd><p>The font size of the rendered field value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="source.html" title="previous page">Sources</a>
+    <a class='right-next' id="next-link" href="filter.html" title="next page">Filters</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, HoloViz Developers.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

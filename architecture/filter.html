@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filters &#8212; Lumen 0.0.1 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Transforms" href="transform.html" />
+    <link rel="prev" title="Views" href="view.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <p class="title">Lumen</p>
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../index.html">Home</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Architecture</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../rest.html">REST Specification</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../dashboard.html">Dashboard Specification</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+          
+            
+                <li class="">
+                    <a href="index.html">Architecture</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="source.html">Source</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="view.html">View</a>
+                </li>
+            
+          
+            
+                <li class="active">
+                    <a href="">Filter</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="transform.html">Transform</a>
+                </li>
+            
+          
+        
+        
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#filter-types" class="nav-link">Filter types</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="filters">
+<h1>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#lumen.filters.Filter" title="lumen.filters.Filter"><span class="xref myst py py-class">Filter</span></a> classes provide the ability to
+query just a subset of the data provided by a
+<a class="reference internal" href="source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class">Source</span></a>. They therefore provide a powerful
+mechanism to drill down into just a subset of the data.</p>
+<p>The <a class="reference internal" href="#lumen.filters.Filter" title="lumen.filters.Filter"><span class="xref myst py py-class">Filter</span></a> API is very simple:</p>
+<dl class="py class">
+<dt id="lumen.filters.Filter">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.filters.</code><code class="sig-name descname">Filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.filters.Filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Filter provides a query which will be used to filter the data
+returned by a Source.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">field</span></code> = param.String(default=’’)</dt><dd><p>The field being filtered.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">label</span></code> = param.String(default=’’)</dt><dd><p>A label for the Filter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">schema</span></code> = param.Dict(class_=&lt;class ‘dict’&gt;)</dt><dd><p>The JSON schema provided by the Source declaring information
+        about the data to be filtered.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">value</span></code> = param.Parameter()</dt><dd><p>The current filter value.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lumen.filters.Filter.from_spec">
+<em class="property">classmethod </em><code class="sig-name descname">from_spec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spec</span></em>, <em class="sig-param"><span class="n">source_schema</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.filters.Filter.from_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves a Filter specification given the schema of the Source
+it will be filtering on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spec</strong> (<em>dict</em>) – Specification declared as a dictionary of parameter values.</p></li>
+<li><p><strong>source_schema</strong> (<em>dict</em>) – A dictionary containing the JSON schema of the Source to
+be filtered on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The resolved Filter object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.filters.Filter.panel">
+<em class="property">property </em><code class="sig-name descname">panel</code><a class="headerlink" href="#lumen.filters.Filter.panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns: A Panel Viewable object representing the filter.
+:rtype: panel.Viewable or None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.filters.Filter.query">
+<em class="property">property </em><code class="sig-name descname">query</code><a class="headerlink" href="#lumen.filters.Filter.query" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>returns: The current filter query which will be used by the</dt><dd><p>Source to filter the data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="filter-types">
+<h2>Filter types<a class="headerlink" href="#filter-types" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lumen.filters.ConstantFilter">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.filters.</code><code class="sig-name descname">ConstantFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.filters.ConstantFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ConstantFilter allows requesting a constant value from the
+Source.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.filters.base.Filter</span></code>: field, label, schema, value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.filters.FacetFilter">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.filters.</code><code class="sig-name descname">FacetFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.filters.FacetFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The FacetFilter allows faceting the data along some dimension to
+allow a single View to be exploded into multiple by grouping over
+one of the indexes.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.filters.base.Filter</span></code>: field, label, schema, value</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.filters.WidgetFilter">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.filters.</code><code class="sig-name descname">WidgetFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.filters.WidgetFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The WidgetFilter generates a Widget from the table schema provided
+by a Source and returns the current widget value to query the data
+returned by the Source.</p>
+<p>Parameters inherited from:</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">lumen.filters.base.Filter</span></code>: field, label, schema, value</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">default</span></code> = param.Parameter()</dt><dd><p>The default value to use on the widget.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">empty_select</span></code> = param.Boolean(bounds=(0, 1), default=True)</dt><dd><p>Add an option to Select widgets to indicate no filtering.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">multi</span></code> = param.Boolean(bounds=(0, 1), default=True)</dt><dd><p>Whether to use a single-value or multi-value selection widget,
+        e.g. for a numeric value this could be a regular slider or a
+        range slider.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">widget</span></code> = param.ClassSelector(class_=&lt;class ‘panel.widgets.base.Widget’&gt;)</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="view.html" title="previous page">Views</a>
+    <a class='right-next' id="next-link" href="transform.html" title="next page">Transforms</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, HoloViz Developers.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

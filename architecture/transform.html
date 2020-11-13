@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transforms &#8212; Lumen 0.0.1 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="REST Endpoint Specification" href="../rest.html" />
+    <link rel="prev" title="Filters" href="filter.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <p class="title">Lumen</p>
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../index.html">Home</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Architecture</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../rest.html">REST Specification</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../dashboard.html">Dashboard Specification</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+          
+            
+                <li class="">
+                    <a href="index.html">Architecture</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="source.html">Source</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="view.html">View</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="filter.html">Filter</a>
+                </li>
+            
+          
+            
+                <li class="active">
+                    <a href="">Transform</a>
+                </li>
+            
+          
+        
+        
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#transform-types" class="nav-link">Transform types</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="transforms">
+<h1>Transforms<a class="headerlink" href="#transforms" title="Permalink to this headline">¶</a></h1>
+<p>A <a class="reference internal" href="#lumen.transforms.Transform" title="lumen.transforms.Transform"><span class="xref myst py py-class">Transform</span></a> provides the ability to
+transform the tables supplied by a
+<a class="reference internal" href="source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class">Source</span></a>. Given a pandas <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> it applies
+some transformation and returns another <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>.</p>
+<dl class="py class">
+<dt id="lumen.transforms.Transform">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Transform provides the ability to transform a table supplied by
+a Source.</p>
+<dl class="py method">
+<dt id="lumen.transforms.Transform.apply">
+<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Transform.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a table transform it in some way and return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>DataFrame</em>) – The queried table as a DataFrame.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A DataFrame containing the transformed data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lumen.transforms.Transform.from_spec">
+<em class="property">classmethod </em><code class="sig-name descname">from_spec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Transform.from_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves a Transform specification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>spec</strong> (<em>dict</em>) – Specification declared as a dictionary of parameter values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The resolved Transform object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="transform-types">
+<h2>Transform types<a class="headerlink" href="#transform-types" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lumen.transforms.Aggregate">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate one or more columns or indexes, see <cite>pandas.DataFrame.groupby</cite>.</p>
+<p>df.groupby(&lt;by&gt;)[&lt;columns&gt;].&lt;method&gt;()[.reset_index()]</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">by</span></code> = param.ClassSelector(class_=(&lt;class ‘list’&gt;, &lt;class ‘str’&gt;, &lt;class ‘int’&gt;))</dt><dd><p>Columns or indexes to group by.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">columns</span></code> = param.List(bounds=(0, None), default=[])</dt><dd><p>Columns to aggregate.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">with_index</span></code> = param.Boolean(bounds=(0, 1), default=True)</dt><dd><p>Whether to make the groupby columns indexes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">method</span></code> = param.String()</dt><dd><p>Name of aggregation method.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> = param.Dict(class_=&lt;class ‘dict’&gt;, default={})</dt><dd><p>Keyword arguments to the aggregation method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.Columns">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Columns</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects a subset of columns.</p>
+<p>df[&lt;columns&gt;]</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">columns</span></code> = param.List(bounds=(0, None), default=[])</dt><dd><p>The subset of columns to select.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.HistoryTransform">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">HistoryTransform</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.HistoryTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HistoryTransform accumulates a history of the queried data in
+a buffer up to the supplied length and (optionally) adds a
+date_column to the data.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">date_column</span></code> = param.String(default=’’)</dt><dd><p>If defined adds a date column with the supplied name.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length</span></code> = param.Integer(bounds=(1, None), default=10, inclusive_bounds=(True, True))</dt><dd><p>Accumulates a history of data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.Query">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Query</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the <cite>pandas.DataFrame.query</cite> method.</p>
+<p>df.query(&lt;query&gt;)</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">query</span></code> = param.String(default=’’)</dt><dd><p>The query to apply to the table.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.Sort">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Sort</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort on one or more columns, see <cite>pandas.DataFrame.sort_values</cite>.</p>
+<p>df.sort_values(&lt;by&gt;, ascending=&lt;ascending&gt;)</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">by</span></code> = param.ClassSelector(class_=(&lt;class ‘list’&gt;, &lt;class ‘str’&gt;, &lt;class ‘int’&gt;))</dt><dd><p>Columns or indexes to sort by.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ascending</span></code> = param.ClassSelector(class_=(&lt;class ‘bool’&gt;, &lt;class ‘list’&gt;), default=True)</dt><dd><p>Sort ascending vs. descending. Specify list for multiple sort
+       orders. If this is a list of bools, must match the length of
+       the by.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.Stack">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Stack</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stacks the declared level, see <cite>pandas.DataFrame.stack</cite>.</p>
+<p>df.stack(&lt;level&gt;)</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">level</span></code> = param.ClassSelector(class_=(&lt;class ‘int’&gt;, &lt;class ‘list’&gt;, &lt;class ‘str’&gt;))</dt><dd><p>The indexes to stack.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lumen.transforms.Unstack">
+<em class="property">class </em><code class="sig-prename descclassname">lumen.transforms.</code><code class="sig-name descname">Unstack</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lumen.transforms.Unstack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unstacks the declared level(s), see <cite>pandas.DataFrame.stack</cite>.</p>
+<p>df.unstack(&lt;level&gt;)</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">level</span></code> = param.ClassSelector(class_=(&lt;class ‘int’&gt;, &lt;class ‘list’&gt;, &lt;class ‘str’&gt;))</dt><dd><p>The indexes to unstack.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="filter.html" title="previous page">Filters</a>
+    <a class='right-next' id="next-link" href="../rest.html" title="next page">REST Endpoint Specification</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, HoloViz Developers.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

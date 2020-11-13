@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard specification &#8212; Lumen 0.0.1 documentation</title>
+    
+  <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="REST Endpoint Specification" href="rest.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="index.html">
+    
+      <p class="title">Lumen</p>
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="index.html">Home</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="architecture/index.html">Architecture</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="rest.html">REST Specification</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="">Dashboard Specification</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+        
+        
+        
+        
+          
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#sections" class="nav-link">Sections</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#config" class="nav-link">config</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#defaults" class="nav-link">defaults</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#sources" class="nav-link">sources</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#targets" class="nav-link">targets</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#special-syntax" class="nav-link">Special Syntax</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#source-references" class="nav-link">Source References</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="dashboard-specification">
+<h1>Dashboard specification<a class="headerlink" href="#dashboard-specification" title="Permalink to this headline">¶</a></h1>
+<p>The Lumen dashboard can be configured using a <code class="docutils literal notranslate"><span class="pre">dashboard.yml</span></code>
+file. The core design principle behind the yaml specification is that
+it instantiates instances of the four main types, i.e.
+<a class="reference internal" href="architecture/filter.html#lumen.filters.Filter" title="lumen.filters.Filter"><span class="xref myst py py-class">Filter</span></a>, <a class="reference internal" href="architecture/source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class">Source</span></a>,
+<a class="reference internal" href="architecture/transform.html#lumen.transforms.Transform" title="lumen.transforms.Transform"><span class="xref myst py py-class">Transform</span></a> and <a class="reference internal" href="architecture/view.html#lumen.views.View" title="lumen.views.View"><span class="xref myst py py-class">View</span></a>
+objects.</p>
+<p>For example the <code class="docutils literal notranslate"><span class="pre">type</span></code> declaration of a <code class="docutils literal notranslate"><span class="pre">Source</span></code> is matched against
+<code class="docutils literal notranslate"><span class="pre">source_type</span></code> and all the other keywords are passed as arguments to
+the class, instantiating the object with the provided configuration.</p>
+<div class="section" id="sections">
+<h2>Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
+<p>We will start by breaking down the specification into individual sections.</p>
+<div class="section" id="config">
+<h3><code class="docutils literal notranslate"><span class="pre">config</span></code><a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">config</span></code> section provides general settings which apply to the whole dashboard.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The title of the overall application</span>
+  <span class="nt">layout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The layout to put the targets in (&#39;grid&#39;, &#39;tabs&#39;, &#39;column&#39;)</span>
+  <span class="nt">logo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A URL or local path to an image file</span>
+  <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The template to use for the monitoring application</span>
+  <span class="nt">ncols</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The number of columns to use in the grid of cards</span>
+</pre></div>
+</div>
+<p>A simple example <code class="docutils literal notranslate"><span class="pre">config</span></code> might look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="s">&quot;Example</span><span class="nv"> </span><span class="s">Application&quot;</span>
+  <span class="nt">layout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">grid</span>
+  <span class="nt">logo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">example.png</span>
+  <span class="nt">ncols</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defaults">
+<h3><code class="docutils literal notranslate"><span class="pre">defaults</span></code><a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">defaults</span></code> section allows overriding parameter defaults on the
+<a class="reference internal" href="architecture/filter.html#lumen.filters.Filter" title="lumen.filters.Filter"><span class="xref myst py py-class">Filter</span></a>, <a class="reference internal" href="architecture/source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class">Source</span></a>,
+<a class="reference internal" href="architecture/transform.html#lumen.transforms.Transform" title="lumen.transforms.Transform"><span class="xref myst py py-class">Transform</span></a> and <a class="reference internal" href="architecture/view.html#lumen.views.View" title="lumen.views.View"><span class="xref myst py py-class">View</span></a>
+objects.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+  <span class="nt">filters</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Type to override the default on</span>
+      <span class="nt">...</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Parameter to override</span>
+  <span class="nt">sources</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Type to override the default on</span>
+      <span class="nt">...</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Parameter to override</span>
+  <span class="nt">transforms</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Type to override the default on</span>
+      <span class="nt">...</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Parameter to override</span>
+  <span class="nt">views</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Type to override the default on</span>
+      <span class="nt">...</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Parameter to override</span>
+</pre></div>
+</div>
+<p>As an example we may want to override the default <code class="docutils literal notranslate"><span class="pre">WidgetFilter.multi</span></code>
+value, because we want to query with a specific value rather than
+multiple values:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+  <span class="nt">filters</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">widget</span>
+      <span class="nt">multi</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sources">
+<h3><code class="docutils literal notranslate"><span class="pre">sources</span></code><a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">sources</span></code> section allows defining <a class="reference internal" href="architecture/source.html#lumen.sources.Source" title="lumen.sources.Source"><span class="xref myst py py-class">Source</span></a>
+instances which can be referenced from the monitoring targets. This is
+useful when reusing a <code class="docutils literal notranslate"><span class="pre">Source</span></code> across multiple targets.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sources</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The type of Source to instantiate</span>
+    <span class="nt">...</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Additional parameters for the Source</span>
+</pre></div>
+</div>
+<p>As an example we may want to load a table of population data from a
+local CSV file using the <a class="reference internal" href="architecture/source.html#lumen.sources.FileSource" title="lumen.sources.FileSource"><span class="xref myst py py-class">FileSource</span></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sources</span><span class="p">:</span>
+  <span class="nt">population</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">file</span>
+    <span class="nt">files</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">population.csv</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>This will declare a <code class="docutils literal notranslate"><span class="pre">Source</span></code> called <code class="docutils literal notranslate"><span class="pre">population</span></code> which publishes a table called <code class="docutils literal notranslate"><span class="pre">population</span></code>.</p>
+</div>
+<div class="section" id="targets">
+<h3><code class="docutils literal notranslate"><span class="pre">targets</span></code><a class="headerlink" href="#targets" title="Permalink to this headline">¶</a></h3>
+<p>The targets section defines the actual monitoring targets and
+therefore makes up the meat of the declaration.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">targets</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is the list of targets to monitor</span>
+  <span class="l l-Scalar l-Scalar-Plain">- title</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The title of the monitoring endpoint</span>
+    <span class="l l-Scalar l-Scalar-Plain">source</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The Source used to monitor an endpoint (may also reference a Source in the sources section</span>
+      <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The type of Source to use, e.g. &#39;rest&#39; or &#39;live&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">...</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Additional parameters for the Source</span>
+    <span class="l l-Scalar l-Scalar-Plain">views</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">A list of metrics to monitor and display on the endpoint</span>
+      <span class="l l-Scalar l-Scalar-Plain">- table</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The name of the table to visualize</span>
+        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The type of View to use for rendering the table</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Additional parameters for the View</span>
+    <span class="l l-Scalar l-Scalar-Plain">filters</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">A list of Filter types to select a subset of the data</span>
+      <span class="l l-Scalar l-Scalar-Plain">- field</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The name of the filter</span>
+        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The type of the Filter to use, e.g. &#39;constant&#39;, &#39;widget&#39; or &#39;facet&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Additional parameters for the Filter</span>
+    <span class="l l-Scalar l-Scalar-Plain">layout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The layout of the card(s), e.g. &#39;row&#39;, &#39;column&#39; or &#39;grid&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">refresh_rate</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">How frequently to poll for updates in milliseconds</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Additional parameters passed to the Card layout(s), e.g. width or height</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="special-syntax">
+<h2>Special Syntax<a class="headerlink" href="#special-syntax" title="Permalink to this headline">¶</a></h2>
+<p>To avoid repeating yourself the yaml specification supports some special syntax.</p>
+<div class="section" id="source-references">
+<h3>Source References<a class="headerlink" href="#source-references" title="Permalink to this headline">¶</a></h3>
+<p>In some scenarios you might want to refer to a <code class="docutils literal notranslate"><span class="pre">Source</span></code>, a table on a
+<code class="docutils literal notranslate"><span class="pre">Source</span></code> or a field on a table from elsewhere in the yaml
+specification.</p>
+<p>As an example you may have local CSV file which contains a column of
+URLs to monitor and feed that information to a <code class="docutils literal notranslate"><span class="pre">WebsiteSource</span></code> which
+reports whether those URLs are live. Using the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> syntax we can
+easily establish such references.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sources</span><span class="p">:</span>
+  <span class="n">csv</span><span class="p">:</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">file</span>
+    <span class="n">files</span><span class="p">:</span> <span class="p">[</span><span class="n">websites</span><span class="o">.</span><span class="n">csv</span><span class="p">]</span>
+  <span class="n">live</span><span class="p">:</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">live</span>
+    <span class="n">urls</span><span class="p">:</span> <span class="s2">&quot;@csv.websites.url&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;csv.websites.url</span></code> syntax will look up a <code class="docutils literal notranslate"><span class="pre">Source</span></code> called ‘csv’,
+request a table called ‘websites’ and then feed the ‘url’ column in
+that table to the <code class="docutils literal notranslate"><span class="pre">urls</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">WebsiteSource</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="rest.html" title="previous page">REST Endpoint Specification</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, HoloViz Developers.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
