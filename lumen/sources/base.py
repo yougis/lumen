@@ -17,6 +17,8 @@ import panel as pn
 import param
 import requests
 
+
+
 from ..util import get_dataframe_schema, merge_schemas
 from ..filters import Filter
 
@@ -469,6 +471,11 @@ class FileSource(Source):
                 if 'orient' not in kwargs:
                     kwargs['orient'] = None
                 return dd.read_json, kwargs
+        if self.request:
+            return requests.get , kwargs
+
+
+
         if ext not in self._pd_load_fns:
             raise ValueError("File type '{ext}' not recognized and cannot be loaded.")
         return self._pd_load_fns[ext], kwargs
@@ -507,7 +514,7 @@ class FileSource(Source):
         for m in self._template_re.findall(table):
             ref = f'@{m[2:-1]}'
             values = self._resolve_reference(ref, {})
-            values = ','.join([v for v in values])
+            values = ' '.join([v for v in values])
             table = table.replace(m, quote(values))
         return [table]
 
@@ -540,7 +547,10 @@ class FileSource(Source):
                     raise e
             else:
                 try:
-                    dfs = [load_fn(path, **kwargs) for path in paths]
+                    if self.request:
+                        dfs = [pd.DataFrame(json.loads(load_fn(path, **kwargs).content)['data']) for path in paths]
+                    else:
+                        dfs = [load_fn(path, **kwargs) for path in paths]
                 except Exception as e:
                     if dask:
                         return self._load_table(table, dask=False)
@@ -584,6 +594,8 @@ class JSONSource(FileSource):
             }
     """)
 
+    request = param.Boolean(default=False)
+
     source_type = 'json'
 
     def _resolve_template_vars(self, template):
@@ -602,20 +614,23 @@ class JSONSource(FileSource):
                 tvalues = zip(*chunk)
                 table = template
                 for m, tvals in zip(template_vars, tvalues):
-                    tvals = ','.join([v for v in set(tvals)])
+                    tvals = ' '.join([v for v in set(tvals)])
                     table = table.replace(m, quote(tvals))
                 tables.append(table)
         else:
             tvalues = list(zip(*cross_product))
             table = template
             for m, tvals in zip(template_vars, tvalues):
-                values = ','.join([v for v in set(tvals)])
+                values = ' '.join([v for v in set(tvals)])
                 table = table.replace(m, quote(values))
             tables.append(table)
         return tables
 
-    def _load_fn(self, ext):
-        return super()._load_fn('json')
+    def _load_fn(self, ext, dask=True):
+        if self.request:
+            return super()._load_fn('request')
+        else:
+            return super()._load_fn('json')
 
     @cached(with_query=False)
     def get(self, table, **query):

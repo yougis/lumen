@@ -1,0 +1,67 @@
+config:
+  title: "ODK Observation"
+  layout: column
+sources:
+  Formulaires:
+    type: json
+    shared: true
+    #cache_dir: cache
+    use_dask: false
+    request: True
+    kwargs :
+      cookies :
+        JOSSO_SESSIONID : '72D7705E5437B044824FAAF0B40D0D2C'
+    tables:
+      formulaires: "https://psud.nc/odk/odk/Formulaire?_responseMode=json"
+
+  Observations:
+    type: json
+    use_dask: false
+    request: True
+    chunk_size: 15
+    kwargs:
+      cookies:
+        JOSSO_SESSIONID : '72D7705E5437B044824FAAF0B40D0D2C'
+    tables:
+      observations: "https://psud.nc/odk/odk/Observation?formulaire.id|ContainsAny=@{Formulaires.formulaires.id}&_responseMode=json"
+  #Formulaires_Observations:
+  #  type: join
+  #  sources: [Formulaires, Observations]
+  #  tables:
+  #    formulaires_observations:
+  #      - source: Formulaires
+  #        table: formulaires
+  #        index: id
+  #      - source: Observations
+  #        table: observations
+  #        index: formulaire_id
+    #filters:
+    #  auteur:
+    #    type: widget
+    #    field: auteur
+targets:
+  - title: "Observations ODk"
+    source: Observations
+    views:
+      #table:
+      #  type: table
+      #  table: observations
+      #  width: 400
+      #  height: 500
+      #  margin: [0, 100]
+      #  show_index: true
+      #  transforms:
+      #    - type: columns
+      #      columns: [id, instanceLabel,dateObservation, auteur]
+      count_hist:
+        type: hvplot
+        table: observations
+        kind: hist
+        responsive: true
+        height: 300
+        streaming: true
+    #filters:
+    #  - auteur
+    #layout: [[table], [count_hist]]
+    sizing_mode: stretch_width
+    height: 900
