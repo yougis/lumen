@@ -1,0 +1,45 @@
+config:
+  title: "ODK Observation"
+  layout: column
+sources:
+  Formulaires:
+    type: json
+    shared: true
+    request: True
+    kwargs:
+      cookies:
+        JOSSO_SESSIONID: 'FD33EF870E260AFDB4259D550351DB5C'
+    tables:
+      formulaires: "https://psud.nc/odk/odk/Formulaire?_responseMode=json"
+
+    Observations:
+      type: json
+      request: True
+      chunk_size: 1
+      cache_dir: cache
+      kwargs:
+        cookies:
+          JOSSO_SESSIONID: 'FD33EF870E260AFDB4259D550351DB5C'
+      tables:
+        observations: "https://psud.nc/odk/odk/Formulaire/id|ContainsAny=@{Formulaires.formulaires.id}/listeObservation?_responseMode=json"
+targets:
+  - title: "Observations ODk"
+    source: Formulaires_Observations
+    views:
+      table:
+        type: table
+        table: formulaires
+        width: 400
+        height: 500
+        margin: [0, 100]
+        show_index: false
+      count_hist:
+        type: hvplot
+        table: formulaires
+        kind: hist
+        responsive: true
+        height: 300
+        streaming: true
+    layout: [[table]]
+    sizing_mode: stretch_width
+    height: 900
