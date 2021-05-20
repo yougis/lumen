@@ -17,11 +17,10 @@ import panel as pn
 import param
 import requests
 
+
+
+from ..util import get_dataframe_schema, merge_schemas
 from ..filters import Filter
-from ..transforms import Transform
-from ..util import (
-    get_dataframe_schema, merge_schemas, resolve_module_reference
-)
 
 
 def cached(with_query=True):
@@ -97,8 +96,6 @@ class Source(param.Parameterized):
 
     @classmethod
     def _get_type(cls, source_type):
-        if '.' in source_type:
-            return resolve_module_reference(source_type, Source)
         try:
             __import__(f'lumen.sources.{source_type}')
         except Exception:
@@ -180,29 +177,6 @@ class Source(param.Parameterized):
         return field_schema['enum']
 
     @classmethod
-    def _recursive_resolve(cls, spec, sources, source_type):
-        resolved_spec = {}
-        if 'sources' in source_type.param and 'sources' in spec:
-            resolved_spec['sources'] = {
-                source: cls.from_spec(source, sources)
-                for source in spec.pop('sources')
-            }
-        if 'source' in source_type.param and 'source' in spec:
-            resolved_spec['source'] = cls.from_spec(spec.pop('source'), sources)
-        for k, v in spec.items():
-            if isinstance(v, str) and v.startswith('@'):
-                v = cls._resolve_reference(v, sources)
-            elif isinstance(v, dict):
-                v = cls._recursive_resolve(v, sources, source_type)
-            if k == 'filters' and 'source' in resolved_spec:
-                source_schema = resolved_spec['source'].get_schema()
-                v = [Filter.from_spec(fspec, source_schema) for fspec in v]
-            if k == 'transforms':
-                v = [Transform.from_spec(tspec) for tspec in v]
-            resolved_spec[k] = v
-        return resolved_spec
-
-    @classmethod
     def from_spec(cls, spec, sources={}, root=None):
         """
         Creates a Source object from a specification. If a Source
@@ -238,7 +212,21 @@ class Source(param.Parameterized):
 
         spec = dict(spec)
         source_type = Source._get_type(spec.pop('type'))
-        resolved_spec = cls._recursive_resolve(dict(spec), sources, source_type)
+        if 'sources' in source_type.param and 'sources' in spec:
+            resolved_sources = {
+                source: cls.from_spec(source, sources)
+                for source in spec['sources']
+            }
+            spec['sources'] = resolved_sources
+        resolved_spec = {}
+        for k, v in spec.items():
+            if isinstance(v, str) and v.startswith('@'):
+                v = cls._resolve_reference(v, sources)
+            resolved_spec[k] = v
+        if 'filters' in spec and 'source' in resolved_spec:
+            source_schema = resolved_spec['source'].get_schema()
+            resolved_spec['filters'] = [Filter.from_spec(fspec, source_schema)
+                                        for fspec in spec['filters']]
         resolved_spec['root'] = root
         return source_type(**resolved_spec)
 
@@ -330,16 +318,6 @@ class Source(param.Parameterized):
         """
         return None
 
-    def get_tables(self):
-        """
-        Returns the list of tables available on this source.
-
-        Returns
-        -------
-        list
-            The list of available tables on this source.
-        """
-
     def get_schema(self, table=None):
         """
         Returns JSON schema describing the tables returned by the
@@ -354,15 +332,8 @@ class Source(param.Parameterized):
         Returns
         -------
         dict
-            JSON schema(s) for one or all the tables.
+           JSON schema(s) for one or all the tables.
         """
-        schemas = {}
-        for name in self.get_tables():
-            if table is not None and name != table:
-                continue
-            df = self.get(name, __dask=True)
-            schemas[name] = get_dataframe_schema(df)['items']['properties']
-        return schemas if table is None else schemas[table]
 
     def get(self, table, **query):
         """
@@ -371,15 +342,40 @@ class Source(param.Parameterized):
         Parameters
         ----------
         table : str
-             The name of the table to query
+            The name of the table to query
         query : dict
-             A dictionary containing all the query parameters
+            A dictionary containing all the query parameters
 
         Returns
         -------
         DataFrame
-            A DataFrame containing the queried table.
+           A DataFrame containing the queried table.
         """
+
+
+class DerivedSource(Source):
+    """
+    A DerivedSource applies a list of Filters to an existing source.
+    """
+
+    filters = param.List(default=[], doc="""
+        A list of filters applied to the data returned by the wrapped source.""")
+
+    source = param.ClassSelector(class_=(Source, str), doc="""
+        A Source to wrap.""")
+
+    source_type = 'derived'
+
+    def get_schema(self, table=None):
+        return self.source.get_schema(table)
+
+    get_schema.__doc__ = Source.get_schema.__doc__
+
+    def get(self, table, **query):
+        query = dict({filt.field: filt.value for filt in self.filters}, **query)
+        return self.source.get(table, **query)
+
+    get.__doc__ = Source.get.__doc__
 
 
 class RESTSource(Source):
@@ -475,6 +471,11 @@ class FileSource(Source):
                 if 'orient' not in kwargs:
                     kwargs['orient'] = None
                 return dd.read_json, kwargs
+        if self.request:
+            return requests.get , kwargs
+
+
+
         if ext not in self._pd_load_fns:
             raise ValueError("File type '{ext}' not recognized and cannot be loaded.")
         return self._pd_load_fns[ext], kwargs
@@ -513,12 +514,19 @@ class FileSource(Source):
         for m in self._template_re.findall(table):
             ref = f'@{m[2:-1]}'
             values = self._resolve_reference(ref, {})
-            values = ','.join([v for v in values])
+            values = ' '.join([v for v in values])
             table = table.replace(m, quote(values))
         return [table]
 
-    def get_tables(self):
-        return list(self._named_files)
+    @cached_schema
+    def get_schema(self, table=None):
+        schemas = {}
+        for name in self._named_files:
+            if table is not None and name != table:
+                continue
+            df = self.get(name, __dask=True)
+            schemas[name] = get_dataframe_schema(df)['items']['properties']
+        return schemas if table is None else schemas[table]
 
     def _load_table(self, table, dask=True):
         df = None
@@ -539,7 +547,10 @@ class FileSource(Source):
                     raise e
             else:
                 try:
-                    dfs = [load_fn(path, **kwargs) for path in paths]
+                    if self.request:
+                        dfs = [pd.DataFrame(json.loads(load_fn(path, **kwargs).content)['data']) for path in paths]
+                    else:
+                        dfs = [load_fn(path, **kwargs) for path in paths]
                 except Exception as e:
                     if dask:
                         return self._load_table(table, dask=False)
@@ -583,6 +594,8 @@ class JSONSource(FileSource):
             }
     """)
 
+    request = param.Boolean(default=False)
+
     source_type = 'json'
 
     def _resolve_template_vars(self, template):
@@ -601,20 +614,23 @@ class JSONSource(FileSource):
                 tvalues = zip(*chunk)
                 table = template
                 for m, tvals in zip(template_vars, tvalues):
-                    tvals = ','.join([v for v in set(tvals)])
+                    tvals = ' '.join([v for v in set(tvals)])
                     table = table.replace(m, quote(tvals))
                 tables.append(table)
         else:
             tvalues = list(zip(*cross_product))
             table = template
             for m, tvals in zip(template_vars, tvalues):
-                values = ','.join([v for v in set(tvals)])
+                values = ' '.join([v for v in set(tvals)])
                 table = table.replace(m, quote(values))
             tables.append(table)
         return tables
 
     def _load_fn(self, ext, dask=True):
-        return super()._load_fn('json', dask=dask)
+        if self.request:
+            return super()._load_fn('request')
+        else:
+            return super()._load_fn('json')
 
     @cached(with_query=False)
     def get(self, table, **query):
@@ -639,9 +655,6 @@ class WebsiteSource(Source):
             }
         }
         return schema if table is None else schema[table]
-    
-    def get_tables(self):
-        return ['status']
 
     @cached(with_query=False)
     def get(self, table, **query):
@@ -688,9 +701,6 @@ class PanelSessionSource(Source):
             }
         }
         return schema if table is None else schema[table]
-
-    def get_tables(self):
-        return ['summary', 'sessions']
 
     def _get_session_info(self, table, url):
         r = requests.get(
@@ -798,9 +808,6 @@ class JoinedSource(Source):
 
     source_type = 'join'
 
-    def get_tables(self):
-        return list(self.tables)
-
     def get_schema(self, table=None):
         schemas = {}
         for name, specs in self.tables.items():
@@ -850,110 +857,3 @@ class JoinedSource(Source):
         super().clear_cache()
         for source in self.sources.values():
             source.clear_cache()
-
-
-
-class DerivedSource(Source):
-    """
-    A DerivedSource references tables on other sources and optionally
-    allows applying filters and transforms to the returned data which
-    is then made available as a new (derived) table.
-
-    The DerivedSource has two modes:
-
-      1) When an explicit `tables` specification is provided full 
-         control over the exact tables to filter and transform is
-         available. This is referred to as the 'table' mode.
-      2) When a `source` is declared all tables on that Source are
-         mirrored and filtered and transformed acccording to the
-         supplied `filters` and `transforms`. This is referred to as
-         'mirror' mode. 
-
-    1. Table Mode
-    ~~~~~~~~~~~~~
-
-    In 'table' mode the tables can reference any table on any source
-    using the reference syntax and declare filters and transforms to
-    apply to that specific table, e.g. a table specification might
-    look like this:
-
-      {
-        'derived_table': 
-        {
-          'source': 'original_source',
-          'table': 'original_table'
-          'filters': [
-            ...
-          ],
-          'transforms': [
-            ...
-          ]
-        }
-      }
-
-    2. Mirror
-    ~~~~~~~~~
-
-    In mirror mode the DerivedSource may reference an existing source
-    directly, e.g.:
-    
-      {
-        'type': 'derived',
-        'source': 'original_source',
-        'filters': [...],
-        'transforms': [...],
-      }
-    """
-
-    filters = param.List(doc="""
-        A list of filters to apply to all tables of this source.""")
-
-    source = param.ClassSelector(class_=Source, doc="""
-        A source to mirror the tables on.""")
-
-    tables = param.Dict(default={}, doc="""
-        The dictionary of tables and associated filters and transforms.""")
-
-    transforms = param.List(doc="""
-        A list of transforms to apply to all tables of this source.""")
-
-    source_type = 'derived'
-
-    def _get_source_table(self, table):
-        if self.tables:
-            spec = self.tables.get(table)
-            if spec is None:
-                raise ValueError(f"Table '{table}' was not declared on the"
-                                 "DerivedSource. Available tables include "
-                                 f"{list(self.tables)}")
-            source, table = spec['source'], spec['table']
-            filters = spec.get('filters', []) + self.filters
-        else:
-            source = self.source
-            filters = self.filters
-        query = dict({filt.field: filt.value for filt in filters})
-        return source.get(table, **query)
-
-    @cached(with_query=False)
-    def get(self, table, **query):
-        df = self._get_source_table(table)
-        if self.tables:
-            transforms = self.tables[table].get('transforms', []) + self.transforms
-        else:
-            transforms = self.transforms
-        for transform in transforms:
-            df = transform.apply(df)
-        return self._filter_dataframe(df, **query)
-
-    get.__doc__ = Source.get.__doc__
-
-    def get_tables(self):
-        return list(self.tables) if self.tables else self.source.get_tables()
-
-    def clear_cache(self):
-        super().clear_cache()
-        if self.tables:
-            for spec in self.tables.values():
-                spec['source'].clear_cache()
-        else:
-            self.source.clear_cache()
