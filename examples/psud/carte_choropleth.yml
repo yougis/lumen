@@ -1,0 +1,42 @@
+config:
+  layout: tabs
+  ncols: 1
+  template: material
+  theme: default
+  title: Dash Geodata
+sources:
+
+
+  jointure:
+    type: join
+    sources:
+      intake_cat:
+        type: intake
+        uri: /home/yogis/Apps/psud/sudBoard/vizApps/services/intake/catalog.yml
+    tables:
+      table_jointe:
+      - source: intake_cat
+        table: referentiel_commune
+        index: libelle
+      - source : intake_cat
+        table: stations_meteo
+        index: commune
+targets:
+  - layout: row
+    name: carte choro
+    source: jointure
+    facet_layout: tabs
+    width_policy: max
+    views:
+    - tiles: CartoLight
+      alpha: 0.50
+      responsive: True
+      kind: polygons
+      c: libelle
+      table: table_jointe
+      title: Commune NC
+      tools:
+        - tap
+      type: hvplot
+      xaxis: null
+      yaxis: null

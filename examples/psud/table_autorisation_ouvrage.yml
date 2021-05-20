@@ -1,0 +1,37 @@
+config:
+  layout: grid
+  ncols: 2
+  template: material
+  theme: default
+  title: Autorisation ouvrage
+targets:
+- name:
+  layout: grid
+  source:
+    type: intake
+    uri: /home/yogis/Apps/psud/sudBoard/vizApps/services/intake/catalog.yml
+  title: ''
+  filters:
+    - field: "Num\xE9ro ouvrage GERE"
+      type: widget
+    - field: "Num\xE9ro dossier GERE"
+      type: widget
+  views:
+  - type: table
+    table: autorisation_ouvrage_eau
+    pagination : remote
+    layout: fit_data_stretch
+    theme: materialize
+    transforms:
+      - columns:
+          - Etat administratif
+          - "Num\xE9ro dossier GERE"
+          - "Num\xE9ro ouvrage GERE"
+          - "D\xE9bit de pr\xE9l\xE8vement  maximum autoris\xE9 m3/J"
+        type: columns
+  - type: indicator
+    table: autorisation_ouvrage_eau
+    name: m3
+    indicator: number
+    label: Débit max autorisé en m3
+    field: "D\xE9bit de pr\xE9l\xE8vement  maximum autoris\xE9 m3/J"

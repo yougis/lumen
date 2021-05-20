@@ -1,0 +1,28 @@
+config:
+  layout: grid
+  ncols: 2
+  template: material
+  theme: default
+  title: Nouveau DashBoard
+defaults:
+  transforms:
+    - columns:
+        - Etat administratif
+        - "Num\xE9ro dossier GERE"
+        - "Num\xE9ro ouvrage GERE"
+      type: columns
+targets:
+- name: titi
+  width_policy: max
+  source:
+    type: intake
+    uri: /home/yogis/Apps/psud/sudBoard/vizApps/services/intake/catalog.yml
+  title: titi
+  views:
+  - type: table
+    responsive: True
+    min_width: 400
+    table: autorisation_ouvrage_eau
+    pagination : remote
+    layout: fit_data_stretch
+    theme: materialize

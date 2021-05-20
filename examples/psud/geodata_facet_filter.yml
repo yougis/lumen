@@ -1,0 +1,66 @@
+config:
+  layout: grid
+  ncols: 1
+  template: material
+  theme: dark
+  title: HOIH
+sources:
+  geodata:
+    type: intake
+    catalog:
+      sources:
+        geodata_queries_centroid:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(public.ST_transform(tuile,3857))
+              as geometry from geodata.geodata_queries where tuile is not null and date > now() - interval '20 min' LIMIT 10000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+        geodata_queries:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_transform(tuile,3857) as geometry from geodata.geodata_queries where tuile is not null and date > now() - interval '20 min'
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+
+targets:
+- filters:
+  - field: resolution
+    type: widget
+  - field: direction
+    type: facet
+  layout: row
+  width_policy: max
+
+  name: titi
+  source: geodata
+  title: titi
+  facet_layout: tabs
+  views:
+  - alpha: 0.1
+    responsive: True
+    min_width: 400
+    min_height: 500
+    datashade: true
+    kind: polygons
+    table: geodata_queries
+    tiles: CartoLight
+    title: Tuiles livrées depuis 20 minutes
+    tools:
+    - tap
+    transforms:
+    - columns:
+      - date
+      - direction
+      - resolution
+      - geometry
+      type: columns
+    type: hvplot
+    xaxis: null
+    yaxis: null

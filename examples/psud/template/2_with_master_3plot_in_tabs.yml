@@ -1,0 +1,112 @@
+config:
+  layout: gridSpec
+  template: material
+  theme: default
+  title: Dash Geodata
+sources:
+  geodata:
+    type: intake
+    catalog:
+      sources:
+        geodata_queries_centroid:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(public.ST_transform(tuile,3857))
+              as geometry, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 10000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+        geodata_queries:
+          args:
+            sql_expr: select *, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 10000
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: 'Geodata queries'
+          driver: intake_sql.intake_sql.SQLSource
+        referentiel_commune:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_transform(zone_terrestre,3857)
+              as geometry from ref.ref_commune_nc
+            table: ref.ref_commune_nc
+            uri: postgresql://ref:ref@pgsql1-prod.province-sud.prod:5432/ref
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+targets:
+  - filters:
+      - field: direction
+        type: widget
+    position: [':','0:2']
+    tsformat: "%d/%m/%Y %H:%M:%S"
+    name: titi
+    source: geodata
+    width_policy: max
+    height_policy: max
+    views:
+    - tiles: CartoLight
+      alpha: 0.50
+      responsive: True
+      min_width: 400
+      min_height: 500
+      kind: points
+      c: referer_appli
+      legend: bottom
+      table: geodata_queries_centroid
+      title: Localisation des tuiles par application
+      tools:
+        - tap
+      type: hvplot
+      xaxis: null
+      yaxis: null
+  - filters:
+      - field: libelle
+        type: widget
+        multi: False
+      - field: direction
+        type: widget
+    layout: tabs
+    title: Nombre de requettes
+    position: [0,2]
+    name: titi
+    source: geodata
+    width_policy: max
+    views:
+    - type: hvplot
+      name: Par application
+      responsive: True
+      kind: bar
+      title: Par Application
+      table: geodata_queries
+      transforms:
+        - by: referer_appli
+          columns:
+            - count
+          type: aggregate
+          method: sum
+    - type: table
+      table: geodata_queries
+      pagination : remote
+      page_size: 10
+      transforms:
+        - by: direction
+          type: aggregate
+          method: count
+        - type : columns
+          columns :
+            - id
+    - type: hvplot
+      name: Par direction
+      responsive: True
+      rot: 45
+      kind: bar
+      title: Par direction
+      table: geodata_queries
+      transforms:
+        - by: direction
+          type: aggregate
+          method: count
+        - type: columns
+          columns :
+            - count
