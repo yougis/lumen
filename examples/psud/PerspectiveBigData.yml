@@ -1,0 +1,53 @@
+config:
+  layout: gridSpec
+  template: material
+
+  theme: default
+  title: Dash Geodata
+sources:
+  geodata:
+    type: intake
+    catalog:
+      sources:
+        geodata_queries_centroid:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(public.ST_transform(tuile,3857))
+              as geometry, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 day' LIMIT 50000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+        geodata_queries:
+          args:
+            sql_expr: select *, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 day' LIMIT 50000
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: 'Geodata queries'
+          driver: intake_sql.intake_sql.SQLSource
+        referentiel_commune:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_transform(zone_terrestre,3857)
+              as geometry from ref.ref_commune_nc
+            table: ref.ref_commune_nc
+            uri: postgresql://ref:ref@pgsql1-prod.province-sud.prod:5432/ref
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+
+targets:
+  - title: perspective data
+    position: [':',':']
+    source: geodata
+    width_policy: max
+    min_height: 500
+    views:
+    - type: perspective
+      min_width: 400
+      min_height: 700
+      table: geodata_queries
+      plugin: 'd3_y_line'
+      columns :
+        - 'resolution'
+        - 'duree_milli_seconde'

@@ -1,0 +1,68 @@
+config:
+  title: "ODK Observation"
+  layout: column
+sources:
+  Dossiers:
+    type: json
+    shared: true
+    #cache_dir: cache
+    use_dask: false
+    request: True
+    kwargs :
+      cookies :
+        JOSSO_SESSIONID : '72D7705E5437B044824FAAF0B40D0D2C'
+    tables:
+      dossiers: "https://psud.nc/gere/gere/dossier/Dossier?_responseMode=json"
+
+  Ouvrages:
+    type: json
+    use_dask: false
+    request: True
+    chunk_size: 50
+    #cache_dir: cache
+    kwargs:
+      cookies:
+        JOSSO_SESSIONID : '72D7705E5437B044824FAAF0B40D0D2C'
+    tables:
+      ouvrages: "https://psud.nc/gere/gere/ouvrage/Ouvrage/dossier.id|ContainsAny=@{Dossiers.dossiers.id}&_responseMode=json"
+  #Formulaires_Observations:
+  #  type: join
+  #  sources: [Formulaires, Observations]
+  #  tables:
+  #    formulaires_observations:
+  #      - source: Formulaires
+  #        table: formulaires
+  #        index: id
+  #      - source: Observations
+  #        table: observations
+  #        index: formulaire_id
+    #filters:
+    #  auteur:
+    #    type: widget
+    #    field: auteur
+targets:
+  - title: "Ouvrages Gere"
+    source: Ouvrages
+    views:
+      #table:
+      #  type: table
+      #  table: observations
+      #  width: 400
+      #  height: 500
+      #  margin: [0, 100]
+      #  show_index: true
+      #  transforms:
+      #    - type: columns
+      #      columns: [id, instanceLabel,dateObservation, auteur]
+      count_hist:
+        type: hvplot
+        table: ouvrages
+        kind: hist
+        responsive: true
+        height: 300
+        streaming: true
+    #filters:
+    #  - auteur
+    #layout: [[table], [count_hist]]
+    sizing_mode: stretch_width
+    height: 900

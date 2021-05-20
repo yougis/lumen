@@ -1,0 +1,22 @@
+config:
+  layout: grid
+  ncols: 2
+  template: material
+  theme: default
+  title: Nouveau DashBoard
+targets:
+
+  - name: titi
+    source:
+      type: intake
+      uri: /home/yogis/Apps/psud/sudBoard/vizApps/services/intake/catalog.yml
+    title: titi
+    views:
+      
+    - type: table
+      table: stations_meteo
+      pagination : remote
+      transforms:
+        - type: aggregate
+          by : prop
+          method: describe

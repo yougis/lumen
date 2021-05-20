@@ -1,0 +1,52 @@
+config:
+  layout: grid
+  ncols: 1
+  template: material
+  theme: default
+  title: Dashboard Test
+sources:
+  geodata:
+    catalog:
+      sources:
+        geodata_queries:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(public.ST_transform(tuile,3857))
+              as geometry from geodata.geodata_queries where tuile is not null and date > now() - interval '3 hours' LIMIT 10000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+    type: intake
+targets:
+- filters:
+  - field: direction
+    type: widget
+  name: titi
+  source: geodata
+  title: Consultation de geodata
+  width_policy: max
+  views:
+  - alpha: 0.1
+    datashade: true
+    kind: points
+    table: geodata_queries
+    tools:
+    - wheel_zoom
+    - tap
+    tiles: CartoLight
+    title: Avec représentation par datashading
+    responsive: True
+    min_width: 1400
+    min_height: 500
+    transforms:
+    - columns:
+      - date
+      - direction
+      - resolution
+      - geometry
+      type: columns
+    type: hvplot
+    xaxis: null
+    yaxis: null

@@ -1,0 +1,37 @@
+config:
+  layout: grid
+  ncols: 1
+  template: material
+  theme: default
+  title: Dash Geodata
+sources:
+  jointure:
+    type: join
+    sources:
+      intake_cat:
+        type: intake
+        uri: /home/yogis/Apps/psud/sudBoard/vizApps/services/intake/catalog.yml
+    tables:
+      table_jointe:
+      - source : intake_cat
+        table: stations_meteo
+        index: commune
+      - source: intake_cat
+        table: referentiel_commune
+        index: libelle
+targets:
+  - layout: row
+    name: jointure_non_spatiale
+    source: jointure
+    width_policy: max
+    views:
+    - type: table
+      table: table_jointe
+      pagination : remote
+      transforms:
+        - columns:
+            - commune
+            - libelle
+            - prop
+            - etat
+          type: columns

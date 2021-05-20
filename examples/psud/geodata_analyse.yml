@@ -1,0 +1,89 @@
+config:
+  layout: grid
+  ncols: 1
+  template: material
+  theme: default
+  title: Dash Geodata
+sources:
+  geodata:
+    type: intake
+    catalog:
+      sources:
+        geodata_queries_centroid:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(public.ST_transform(tuile,3857))
+              as geometry, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 50000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+        geodata_queries:
+          args:
+            sql_expr: select *, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 50000
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: 'Geodata queries'
+          driver: intake_sql.intake_sql.SQLSource
+targets:
+  - filters:
+      - field: direction
+        type: widget
+      - field: http_method
+        type: widget
+    layout: row
+    name: titi
+    source: geodata
+    width_policy: max
+    views:
+    - tiles: CartoLight
+      alpha: 0.50
+      responsive: True
+      data_aspect: 1
+      min_width: 400
+      min_height: 500
+      kind: points
+      c: referer_appli
+      legend: bottom
+      table: geodata_queries_centroid
+      title: Localisation des tuiles par application
+      tools:
+        - tap
+      type: hvplot
+      xaxis: null
+      yaxis: null
+    - type: hvplot
+      responsive: True
+      kind: bar
+      title: Nombre de requettes
+      table: geodata_queries
+      transforms:
+        - by: referer_appli
+          columns:
+            - count
+          type: aggregate
+          method: sum
+  - filters:
+    - field: direction
+      type: widget
+    source: geodata
+    facet :
+      sort:
+        - direction
+        - duree_milli_seconde
+    name: tata
+    views:
+    - type: table
+      table: geodata_queries
+      pagination : remote
+      layout: fit_columns
+      hidden_columns:
+        - code_appli
+        - version
+        - instance_label
+        - query
+        - tuile
+        - session_id
+        - create_appli
+        - index
+      page_size: 10

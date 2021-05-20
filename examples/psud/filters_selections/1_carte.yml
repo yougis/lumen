@@ -1,0 +1,81 @@
+config:
+  layout: row
+  template: material
+  theme: default
+  title: Dash Geodata
+sources:
+  geodata:
+    type: intake
+    filters:
+      expr:
+        type: param
+        parameter: nbqueries.selection_expr
+      direction:
+        type: widget
+        field: direction
+
+    catalog:
+      sources:
+        geodata_queries_centroid:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_Centroid(tuile)
+              as geometry, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 1000
+            table: geodata.geodata_queries
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+        geodata_queries:
+          args:
+            sql_expr: select *, 1 as count from geodata.geodata_queries where tuile is not null and date > now() - interval '10 min' LIMIT 1000
+            uri: postgresql://geodata:geodata@pgsql1-prod.province-sud.prod:5432/geodata
+          description: 'Geodata queries'
+          driver: intake_sql.intake_sql.SQLSource
+        referentiel_commune:
+          args:
+            geopandas_kwargs:
+              geom_col: geometry
+            sql_expr: select *, public.ST_transform(zone_terrestre,3857)
+              as geometry from ref.ref_commune_nc
+            table: ref.ref_commune_nc
+            uri: postgresql://ref:ref@pgsql1-prod.province-sud.prod:5432/ref
+          description: ''
+          driver: intake_geopandas.geopandas.PostGISSource
+targets:
+- title : Map
+  filters:
+  - direction
+  - expr
+  source: geodata
+  sizing_mode: stretch_width
+  width_policy: max
+  height_policy: max
+  views:
+    map:
+      title: Tuiles livrées depuis 10 minutes
+      debug : true
+      min_width: 500
+      min_height: 500
+      selection_group: geodata
+      data_aspect: 1
+      shared_axes: true
+      alpha: 0.1
+      kind: points
+      c: referer_appli
+      legend: bottom
+      table: geodata_queries_centroid
+      #tiles: CartoLight
+      tools:
+      - tap
+      transforms:
+      - columns:
+        - date
+        - direction
+        - resolution
+        - duree_milli_seconde
+        - referer_appli
+        - geometry
+        type: columns
+      type: hvplot
+  layout: [[map]]
